@@ -1,5 +1,38 @@
 # k8s_project
 
+<img width="801" alt="스크린샷 2023-11-10 오후 5 29 34" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/5257b72c-ae90-4a34-bf6a-1acd8834c599">
+
+<img width="797" alt="스크린샷 2023-11-10 오후 5 29 59" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/b60e8f3a-1114-4a1f-aef8-66abd33af612">
+
+<img width="791" alt="스크린샷 2023-11-10 오후 5 30 17" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/d4a5c712-23e6-4190-94bd-b55b8d7e2b74">
+
+<img width="792" alt="스크린샷 2023-11-10 오후 5 30 27" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/11ea6d7d-415a-44a8-b90d-17c6a0ef19bc">
+
+<img width="792" alt="스크린샷 2023-11-10 오후 5 30 34" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/0d5e02f3-2ada-4811-b43f-07bcc691a6f5">
+
+<img width="792" alt="스크린샷 2023-11-10 오후 5 30 39" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/f180c489-cfd8-43e0-b309-e13f5d19732d">
+
+<img width="793" alt="스크린샷 2023-11-10 오후 5 30 56" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/6f825b2b-bbea-46a2-99ed-fbeda63f5675">
+
+<img width="785" alt="스크린샷 2023-11-10 오후 5 31 00" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/3087de04-6968-4957-8053-c1918286c5e9">
+
+<img width="795" alt="스크린샷 2023-11-10 오후 5 31 07" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/07d9564a-343c-468e-8fb2-6be286446171">
+
+<img width="779" alt="스크린샷 2023-11-10 오후 5 31 12" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/8f6ff092-715d-41c9-b964-f9068bda91cb">
+
+<img width="776" alt="스크린샷 2023-11-10 오후 5 31 19" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/48acd0d0-f48e-4e7f-a2af-d10c04fe33bb">
+
+<img width="783" alt="스크린샷 2023-11-10 오후 5 31 42" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/65b5d656-f87d-4c58-9c81-98ee5fe01670">
+
+<img width="765" alt="스크린샷 2023-11-10 오후 5 31 51" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/dd78ebbd-5a64-470c-b46c-6e0ad9794493">
+
+<img width="745" alt="스크린샷 2023-11-10 오후 5 32 02" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/4baf5edf-ecba-45ad-9eee-8189818a93fb">
+
+<img width="761" alt="스크린샷 2023-11-10 오후 5 32 09" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/4408355d-fcf2-4cf4-8266-24765cd9810f">
+
+<img width="775" alt="스크린샷 2023-11-10 오후 5 32 14" src="https://github.com/hyunwoopark0/k8s_project/assets/144861873/27a1f736-247f-43d8-9b27-9e3177a45db3">
+
+
 # EDA 
 - ## data
   ```
@@ -243,381 +276,5 @@
   
   # 마스터 노드에서 kubectl get node 로 노드 추가 확인
   ```
-
-
-# airflow
-- ## build custom airflow image
-
-  m1 Mac 의 경우 ec2와 아키텍쳐가 다르기때문에 ec2에서 빌드할 것
-  
-  ```
-  docker login
-  docker build . -t [docker hub id]/[repo]:0.3
-  docker push [docker hub id]/[repo]:0.3
-  ```
-
-- ## postgres for metadata database setup
-
-  ```
-  sudo -i -u postgres
-  
-  psql
-  
-  CREATE DATABASE airflow;
-  CREATE USER airflow WITH PASSWORD 'airflow';
-  GRANT ALL PRIVILEGES ON DATABASE airflow TO airflow;
-  \c airflow;
-  GRANT ALL ON SCHEMA public TO airflow;
-  
-  ```
-
-- ## pv setup
-
-  nfs 서버의 /etc/exports 아래에 두 줄 추가 후에 nfs 서버 재시작 (디렉토리도 만들어놓아야함)
-  ```
-  /mnt/data/airflow/dags *(rw,sync,no_root_squash)
-  /mnt/data/airflow/logs *(rw,sync,no_root_squash)
-  ```
-
-- ## airflow setup
-
-  ```
-  # Makefile 로 설치
-  make
-  
-  # uninstall
-  make clean
-  ----------------------------------------------------------------
-  # Manual Install
-  # repo 추가
-  helm repo add apache-airflow https://airflow.apache.org
-  
-  # pv 추가 (nfs 서버 ip 확인)
-  kubectl apply -f pv-airflow-dags.yaml
-  
-  # [values.yaml 파일 수정]
-  # 첫 실행시는 아래를 true(기본값이 true), 그 이후에는 false
-  # migrateDatabaseJob:
-  #   enabled: true
-  #
-  # data: 아래에 외부 postgres db 설정
-  helm upgrade --install airflow apache-airflow/airflow --namespace airflow --create-namespace -f values.yaml
-  
-  # uninstall
-  helm uninstall airflow -n airflow
-  kubectl delete pv pv-airflow-dags.yaml
-  ```
-
-
-
-  
-# kafka
-- ## kafka architecture in k8s
-  ---
-  
-  <img width="1156" alt="image" src="https://github.com/yeardream-de-project-team4/k8s_project/assets/75843973/36c63c00-1cfd-4ebd-9726-2934713d4855">
-  
-  ---
-
-- ## producer
-  ---
-  
-  <img width="1209" alt="스크린샷 2023-11-02 오후 3 11 13" src="https://github.com/yeardream-de-project-team4/k8s_project/assets/75843973/c7e3a0f8-aa52-42b4-8217-43546b61d604">
-  
-  - producer.jar
-  
-  git clone --branch feature/kafka https://github.com/yeardream-de-project-team4/k8s_project.git
-  
-  - producer.yaml
-  ```
-  apiVersion: batch/v1
-  kind: Job
-  metadata:
-    name: airport-producer-job
-  spec:
-    template:
-      spec:
-        restartPolicy: Never
-        containers:
-        - name: my-container
-          image: 나의 producer image
-          volumeMounts:
-          - name: nfs-volume
-            mountPath: /app/resources
-        volumes:
-        - name: nfs-volume
-          persistentVolumeClaim:
-            claimName: my-nfs-pvc
-  ```
-  
-  ---
-
-- ## broker
-  ---
-  
-  <img width="946" alt="스크린샷 2023-11-02 오후 3 45 38" src="https://github.com/yeardream-de-project-team4/k8s_project/assets/75843973/2598ed83-b317-4409-9481-d8d69c7561e6">
-  
-  
-  ※ zookeeper 및 Kafka의 config는 env 부분에 각자 원하는대로 설정하면 된다. 참고로 아래는 기본적인 설정만 되어있다.
-  
-  
-  
-  - zookeeper.yaml
-  ```
-  apiVersion: apps/v1
-  kind: StatefulSet
-  metadata:
-    name: zookeeper-statefulset
-    labels:
-      app: zookeeper
-  spec:
-    replicas: 3
-    serviceName: zksvc
-    selector:
-      matchLabels:
-        app: zookeeper
-    template:
-      metadata:
-        labels:
-          app: zookeeper
-      spec:
-        containers:
-        - name: zookeeper
-          image: confluentinc/cp-zookeeper:7.0.1
-          ports:
-          - containerPort: 2181
-          env:
-          - name: ZOOKEEPER_CLIENT_PORT
-            value: "2181"
-          - name: ZOOKEEPER_TICK_TIME
-            value: "2000"
-    volumeClaimTemplates:
-    - metadata:
-        name: datadir
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        storageClassName: "zoo-pv"
-        resources:
-          requests:
-            storage: 10Gi
-  
-  ---
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: zksvc
-  spec:
-    type: ClusterIP
-    clusterIP: None
-    selector:
-      app: zookeeper
-    ports:
-      - protocol: TCP
-        port: 2181
-        targetPort: 2181
-  ```
-  - zookeeper_pv.yaml
-  ```
-  apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: zoo-pv-0
-  spec:
-    capacity:
-      storage: 10Gi
-    accessModes:
-      - ReadWriteOnce
-    persistentVolumeReclaimPolicy: Delete
-    storageClassName: 'zoo-pv'
-    hostPath:
-      path: /data/
-      type: DirectoryOrCreate
-  ---
-  apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: zoo-pv-1
-  spec:
-    capacity:
-      storage: 10Gi
-    accessModes:
-      - ReadWriteOnce
-    persistentVolumeReclaimPolicy: Delete
-    storageClassName: 'zoo-pv'
-    hostPath:
-      path: /data/
-      type: DirectoryOrCreate
-  ---
-  apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: zoo-pv-2
-  spec:
-    capacity:
-      storage: 10Gi
-    accessModes:
-      - ReadWriteOnce
-    persistentVolumeReclaimPolicy: Delete
-    storageClassName: 'zoo-pv'
-    hostPath:
-      path: /data/
-      type: DirectoryOrCreate
-  ```
-  - Kafka.yaml
-  ```
-  apiVersion: apps/v1
-  kind: StatefulSet
-  metadata:
-    name: kafka-statefulset
-    labels:
-      app: kafka
-  spec:
-    replicas: 3
-    serviceName: kafka-service
-    selector:
-      matchLabels:
-        app: kafka
-    template:
-      metadata:
-        labels:
-          app: kafka
-      spec:
-        containers:
-        - name: broker
-          image: confluentinc/cp-kafka:7.0.1
-          ports:
-          - containerPort: 9092
-          env:
-          - name: MY_POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: KAFKA_ZOOKEEPER_CONNECT
-            value: zookeeper-statefulset-0.zksvc:2181,zookeeper-statefulset-1.zksvc:2181,zookeeper-statefulset-2.zksvc:2181
-          - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-            value: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-          - name: KAFKA_ADVERTISED_LISTENERS
-            value: PLAINTEXT://:29092,PLAINTEXT_INTERNAL://$(MY_POD_NAME).kafka-service:9092
-          - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-            value: "1"
-          - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
-            value: "1"
-          - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
-            value: "1"
-    volumeClaimTemplates:
-    - metadata:
-        name: kafkadir
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: "kafka"
-        resources:
-          requests:
-            storage: 10Gi
-  
-  ---
-  
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: kafka-service
-  spec:
-    type: ClusterIP
-    clusterIP: None
-    selector:
-      app: kafka
-    ports:
-      - protocol: TCP
-        port: 9092
-        targetPort: 9092
-  ```
-  - Kafka_pv.yaml
-  ```
-  apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: kafka-0
-    namespace: kafka-ns
-  spec:
-    capacity:
-      storage: 10Gi
-    accessModes:
-      - ReadWriteOnce
-    persistentVolumeReclaimPolicy: Delete
-    storageClassName: "kafka"
-    hostPath:
-      path: /data/
-      type: DirectoryOrCreate
-  ---
-  apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: kafka-1
-    namespace: kafka-ns
-  spec:
-    capacity:
-      storage: 10Gi
-    accessModes:
-      - ReadWriteOnce
-    persistentVolumeReclaimPolicy: Delete
-    storageClassName: "kafka"
-    hostPath:
-      path: /data/
-      type: DirectoryOrCreate
-  ---
-  apiVersion: v1
-  kind: PersistentVolume
-  metadata:
-    name: kafka-2
-    namespace: kafka-ns
-  spec:
-    capacity:
-      storage: 10Gi
-    accessModes:
-      - ReadWriteOnce
-    persistentVolumeReclaimPolicy: Delete
-    storageClassName: "kafka"
-    hostPath:
-      path: /data/
-      type: DirectoryOrCreate
-  ```
-  
-  
-  ---
-
-
-- ## consumer
-  ---
-  
-  <img width="977" alt="스크린샷 2023-11-02 오후 2 19 28" src="https://github.com/yeardream-de-project-team4/k8s_project/assets/75843973/5371e178-bcc2-4627-99a4-2bf043c92c0b">
-  
-  - consumer.jar
-  
-  git clone --branch feature/kafka https://github.com/yeardream-de-project-team4/k8s_project.git
-  
-  - consumer.yaml
-  ```
-  apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    name: airport-consumer
-  spec:
-    replicas: 3
-    selector:
-      matchLabels:
-        app: my-app
-    template:
-      metadata:
-        labels:
-          app: my-app
-      spec:
-        containers:
-          - name: airport-consumer
-            image: 나의 consumer image
-            ports:
-              - containerPort: 80
-  ```
-  
-  ---
-
 
 
