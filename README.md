@@ -1,6 +1,91 @@
 # k8s_project
 
-# k8s
+# EDA 
+- ## data
+  ```
+  
+  Year: The year when the flight took place.
+  Month: The month when the flight took place.
+  DayofMonth: The day of the month when the flight took place.
+  DayOfWeek: The day of the week when the flight took place (e.g., Monday, Tuesday, etc.).
+  DepTime: The actual departure time of the flight.
+  CRSDepTime: The scheduled departure time of the flight.
+  ArrTime: The actual arrival time of the flight.
+  CRSArrTime: The scheduled arrival time of the flight.
+  UniqueCarrier: A code or identifier for the airline operating the flight.
+  FlightNum: The flight number of the specific flight.
+  TailNum: The aircraft tail number, which uniquely identifies the aircraft.
+  ActualElapsedTime: The actual time taken for the flight, including departure and arrival times.
+  CRSElapsedTime: The scheduled (planned) time for the flight, including departure and arrival times.
+  AirTime: The amount of time the aircraft was in the air during the flight.
+  ArrDelay: The actual arrival delay in minutes.
+  DepDelay: The actual departure delay in minutes.
+  
+  
+  
+  
+  Origin: The code or identifier for the airport of origin.
+  Dest: The code or identifier for the destination airport.
+  Distance: The distance in miles between the origin and destination airports.
+  TaxiIn(활주로): The time in minutes that the aircraft spent taxiing after landing.
+  TaxiOut: The time in minutes that the aircraft spent taxiing before taking off.
+  Cancelled: A binary indicator (0 or 1) to show if the flight was canceled.
+  CancellationCode: A code representing the reason for flight cancellation (e.g., weather-related, carrier-related).
+  Diverted: A binary indicator (0 or 1) to show if the flight was diverted to an alternate airport.
+  CarrierDelay: The delay attributed to the airline carrier, in minutes.
+  WeatherDelay: The delay attributed to weather conditions, in minutes.
+  NASDelay: The delay attributed to National Airspace System (NAS) issues, in minutes.
+  SecurityDelay: The delay attributed to security-related issues, in minutes.
+  LateAircraftDelay: The delay attributed to a previously delayed aircraft, in minutes.
+  
+  ```
+  
+  ```
+  EDA 
+  
+  예상 서비스
+  1. 항공 정보 입력 시 도착 시간 예측
+  
+  2. 항공 티켓 구매 시 알 수 있는 정보들을 입력받아, 해당 비행 예상 시간 및 지연율 / 취소 확률 예측
+  
+  
+  
+  
+  
+  ```
+  
+  
+  - ## 서비스
+  
+  ```
+  'Year': 연도
+  'Month': 월
+  'DayofMonth': 월의 일자
+  'DayOfWeek': 요일
+  'CRSDepTime': 예정 출발 시간 (CRS는 Computer Reservation System의 약자로, 컴퓨터 예약 시스템에서 제공하는 스케줄 정보를 의미합니다.)
+  'CRSArrTime': 예정 도착 시간
+  'FlightNum': 항공편 번호
+  'Distance': 거리 
+  
+  1. 티켓 정보 입력 시( 위 정보들은 티켓에 나와있다고 가정 ) , 예상 지연 시간 또는 지연이 될 확률 제공  ( 모델은 Random Forest 사용 -> 성능은 DE 니까 중요하지 않음.. )
+  
+  2. 연도 별 CSV 파일을 주기적으로 업데이트 ( 년마다 업데이트로 가정 ) , 웹 서비스에 지연율이 가장 낮은 항공사 Rank 표를 만들어서, 연도 별 항공 순위 제공
+  
+  ```
+  - ## 예시 서비스 화면 - ( 정보 입력 시, 지연 확률 or 예상 지연 시간 제공 )
+  
+  
+  <img width="1274" alt="스크린샷 2023-10-24 오후 1 56 42" src="https://github.com/yeardream-de-project-team4/k8s_project/assets/113021892/a6d9257d-e172-49c8-9fb2-b25a53760c24">
+  
+  <img width="1928" alt="스크린샷 2023-10-26 오후 12 16 07" src="https://github.com/yeardream-de-project-team4/k8s_project/assets/113021892/ce495a53-f5d5-499a-babc-ba4db614b458">
+
+
+
+
+
+
+
+# k8s setting
 - ## 모든 노드 공통
 
   ```
