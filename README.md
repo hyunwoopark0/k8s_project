@@ -1,7 +1,7 @@
 # k8s_project
 
 # k8s
-## 모든 노드 공통
+- ## 모든 노드 공통
 
 ```
 # 모든 노드 동일한 ssh public key 사용
