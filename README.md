@@ -159,10 +159,10 @@ kubeadm join ~~~
 # 마스터 노드에서 kubectl get node 로 노드 추가 확인
 ```
 
-
-# airflow
 ---
 
+
+# airflow
 ## build custom airflow image
 
 m1 Mac 의 경우 ec2와 아키텍쳐가 다르기때문에 ec2에서 빌드할 것
