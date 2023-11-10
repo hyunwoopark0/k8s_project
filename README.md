@@ -3,74 +3,74 @@
 # k8s
 - ## 모든 노드 공통
 
-```
-# 모든 노드 동일한 ssh public key 사용
-ssh-keygen -t rsa
-cat >> ~/.ssh/authorized_keys < ~/.ssh/id_rsa.pub
-
-# docker 설치
-sudo apt-get install ca-certificates curl gnupg
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-sudo chmod a+r /etc/apt/keyrings/docker.gpg
-
-echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-sudo usermod -aG docker $USER
-
-# 브릿지 네트워크 인터페이스에 대한 트래픽이 iptables 규칙에 의해 처리되도록함
-sudo modprobe br_netfilter
-sudo sysctl net.bridge.bridge-nf-call-iptables=1
-
-# 커널이 처리하는 패킷을 외부로 포워딩(IP forwarding)가능
-sudo sysctl net.ipv4.ip_forward=1
-
-sudo vim /etc/sysctl.conf
-# 아래 두 줄 추가
-# net.bridge.bridge-nf-call-iptables = 1
-# net.ipv4.ip_forward = 1
-
-sudo mkdir -p /etc/containerd
-containerd config default | sudo tee /etc/containerd/config.toml > /dev/null
-
-sudo vim /etc/containerd/config.toml
-# SystemdCgroup = true 설정
-
-sudo systemctl restart containerd
-sudo systemctl enable containerd
-
-# active (running) 체크
-sudo systemctl status containerd
-
-# 쿠버네티스 설치
-sudo apt-get update
-
-sudo apt-get install -y apt-transport-https ca-certificates curl
-
-sudo mkdir -p /etc/apt/keyrings
-
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg
-
-sudo apt-get update
-sudo apt-get install -y kubelet=1.25.6-00 kubeadm=1.25.6-00 kubectl=1.25.6-00
-sudo apt-mark hold kubelet kubeadm kubectl
-
-# 설치확인
-sudo -i
-kubelet --version
-kubeadm version
-kubectl version --output=yaml
-
-# 여기서 AMI 로 스냅샷
-```
+  ```
+  # 모든 노드 동일한 ssh public key 사용
+  ssh-keygen -t rsa
+  cat >> ~/.ssh/authorized_keys < ~/.ssh/id_rsa.pub
+  
+  # docker 설치
+  sudo apt-get install ca-certificates curl gnupg
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  sudo chmod a+r /etc/apt/keyrings/docker.gpg
+  
+  echo \
+    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  
+  sudo usermod -aG docker $USER
+  
+  # 브릿지 네트워크 인터페이스에 대한 트래픽이 iptables 규칙에 의해 처리되도록함
+  sudo modprobe br_netfilter
+  sudo sysctl net.bridge.bridge-nf-call-iptables=1
+  
+  # 커널이 처리하는 패킷을 외부로 포워딩(IP forwarding)가능
+  sudo sysctl net.ipv4.ip_forward=1
+  
+  sudo vim /etc/sysctl.conf
+  # 아래 두 줄 추가
+  # net.bridge.bridge-nf-call-iptables = 1
+  # net.ipv4.ip_forward = 1
+  
+  sudo mkdir -p /etc/containerd
+  containerd config default | sudo tee /etc/containerd/config.toml > /dev/null
+  
+  sudo vim /etc/containerd/config.toml
+  # SystemdCgroup = true 설정
+  
+  sudo systemctl restart containerd
+  sudo systemctl enable containerd
+  
+  # active (running) 체크
+  sudo systemctl status containerd
+  
+  # 쿠버네티스 설치
+  sudo apt-get update
+  
+  sudo apt-get install -y apt-transport-https ca-certificates curl
+  
+  sudo mkdir -p /etc/apt/keyrings
+  
+  echo "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+  
+  curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes.gpg
+  
+  sudo apt-get update
+  sudo apt-get install -y kubelet=1.25.6-00 kubeadm=1.25.6-00 kubectl=1.25.6-00
+  sudo apt-mark hold kubelet kubeadm kubectl
+  
+  # 설치확인
+  sudo -i
+  kubelet --version
+  kubeadm version
+  kubectl version --output=yaml
+  
+  # 여기서 AMI 로 스냅샷
+  ```
 
 ## 보안그룹 설정
 인바운드 규칙
